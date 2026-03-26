@@ -41,7 +41,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 model = AudioLogic().to(device)
 model.eval()
-model.load_state_dict(torch.load('models/speechcommands.pth', map_location=device))
+model.load_state_dict(torch.load('models/speechcommands_model.pth', map_location=device))
 labels = ['backward','bed','bird','cat','dog','down','eight','five',
           'follow','forward','four','go','happy','house','learn','left',
           'marvin','nine','no','off','on','one','right','seven','sheila',
@@ -78,14 +78,14 @@ async def predict_sound(file: UploadFile = File(...)):
         sound_data = await file.read()
         if not sound_data:
             raise HTTPException(detail='Upload the file!', status_code=400)
-        waveform, sample_rate = sf.read(io.BytesIO(sound_data))
+        waveform, sample_rate = sf.read(io.BytesIO(sound_data), dtype='float32')
         waveform = torch.tensor(waveform).T
 
-        spec = change_audio(waveform, sample_rate).unsqueeze(1).to(device)
+        spec = change_audio(waveform, sample_rate).unsqueeze(0).to(device)
 
         with torch.no_grad():
             predict = model(spec)
-            pred_indx = predict.argmax(dim=1).item()
+            pred_indx = torch.argmax(predict, dim=1).item()
             pred_lbl = indx_to_lbl[pred_indx]
 
             return {

@@ -94,7 +94,7 @@ if task == "Image to Text":
         api = 'http://127.0.0.1:8000/phones'
 
         st.title('Smartphones Model')
-        st.write('Загрузите изображение бренда одного из брендов')
+        st.write('Загрузите изображение бренда одного из телефонов и модель попробует его распознать')
 
         uploaded_file = st.file_uploader('Выберите изображение', type=['png', 'jpg', 'jpeg'])
 
@@ -189,8 +189,10 @@ elif task == "Audio to Text":
 
                     if response.status_code == 200:
                         result = response.json()
-                        st.write(f"Индекс класса: {result['index']}")
-                        st.success(f"Предсказанная команда: **{result['label']}**")
+                        st.success(f"""
+                        **Команда:** {result['label']}  
+                        **Индекс:** {result['index']}
+                        """)
 
                     else:
                         st.error(f"Error: {response.status_code}")
