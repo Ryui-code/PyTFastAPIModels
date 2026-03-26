@@ -86,7 +86,7 @@ labels = [
     'truck'
 ]
 
-cifar_10_router = APIRouter(prefix='/cifar-10')
+cifar_10_router = APIRouter(prefix='/cifar-10', tags=['Image to Text'])
 
 @cifar_10_router.post('/')
 async def predict_img(file: UploadFile = File(...)):

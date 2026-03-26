@@ -66,7 +66,7 @@ labels = ['apple', 'aquarium_fish', 'baby', 'bear', 'beaver', 'bed', 'bee', 'bee
  'sweet_pepper', 'table', 'tank', 'telephone', 'television', 'tiger', 'tractor', 'train', 'trout',
  'tulip', 'turtle', 'wardrobe', 'whale', 'willow_tree', 'wolf', 'woman', 'worm']
 
-cifar_100_router = APIRouter(prefix='/cifar-100')
+cifar_100_router = APIRouter(prefix='/cifar-100', tags=['Image to Text'])
 
 @cifar_100_router.post('/')
 async def predict_img(file: UploadFile = File(...)):

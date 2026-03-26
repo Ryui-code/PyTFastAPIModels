@@ -50,7 +50,7 @@ labels = [
     "Ankle boot"
 ]
 
-fashion_router = APIRouter(prefix='/fashion')
+fashion_router = APIRouter(prefix='/fashion', tags=['Image to Text'])
 
 @fashion_router.post('/')
 async def predict_img(file: UploadFile = File(...)):

@@ -37,7 +37,7 @@ model.load_state_dict(torch.load('models/model.pth', map_location=device))
 model.to(device)
 model.eval()
 
-mnist_router = APIRouter(prefix='/mnist')
+mnist_router = APIRouter(prefix='/mnist', tags=['Image to Text'])
 
 @mnist_router.post('/')
 async def predict_img(file: UploadFile = File(...)):

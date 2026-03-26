@@ -32,7 +32,7 @@ model = ConvNeXt().to(device)
 model.load_state_dict(torch.load("models/image_scene_model.pth", map_location=device))
 model.eval()
 
-scene_router = APIRouter(prefix="/scene")
+scene_router = APIRouter(prefix="/scene", tags=['Image to Text'])
 
 @scene_router.post("/")
 async def predict_img(file: UploadFile = File(...)):

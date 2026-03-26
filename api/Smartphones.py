@@ -66,7 +66,7 @@ model.eval()
 
 labels = ['Google Pixel', 'Huawei', 'Iphone', 'Samsung', 'Xiaomi']
 
-phones_router = APIRouter(prefix='/phones')
+phones_router = APIRouter(prefix='/phones', tags=['Image to Text'])
 
 @phones_router.post('/')
 async def predict_img(file: UploadFile = File(...)):
