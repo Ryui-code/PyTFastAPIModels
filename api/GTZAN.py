@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 from torchaudio import transforms
 import io
-from fastapi import HTTPException, APIRouter, File, UploadFile
-import torch.nn.functional as f
 import soundfile as sf
+import torch.nn.functional as f
+from fastapi import HTTPException, APIRouter, File, UploadFile
 
 class AudioLogic(nn.Module):
   def __init__(self):
@@ -29,7 +29,7 @@ class AudioLogic(nn.Module):
         nn.Flatten(),
         nn.Linear(64 * 8 * 8, 128),
         nn.ReLU(),
-        nn.Linear(128, 35)
+        nn.Linear(128, 10)
     )
 
   def forward(self, x):
@@ -38,7 +38,7 @@ class AudioLogic(nn.Module):
     return self.second(x)
 
 transform = transforms.MelSpectrogram(
-    sample_rate=16000,
+    sample_rate=22050,
     n_mels=64
 )
 
@@ -46,22 +46,21 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 model = AudioLogic().to(device)
 model.eval()
-model.load_state_dict(torch.load('models/speechcommands_model.pth', map_location=device))
-labels = ['backward','bed','bird','cat','dog','down','eight','five',
-          'follow','forward','four','go','happy','house','learn','left',
-          'marvin','nine','no','off','on','one','right','seven','sheila',
-          'six','stop','three','tree','two','up','visual','wow','yes','zero'
-          ]
+model.load_state_dict(torch.load('models/gtzan_model.pth', map_location=device))
+
+labels = ['blues','classical','country','disco','hiphop',
+          'jazz','metal','pop','reggae','rock']
 
 indx_to_lbl = {indx: lbl for indx, lbl in enumerate(labels)}
 
-max_len = 100
+max_len = 2500
 def change_audio(waveform, sample_rate):
-    if sample_rate != 16000:
-        new_sr = transforms.Resample(orig_freq=sample_rate, new_freq=16000)
-        waveform = new_sr(torch.tensor(waveform))
+    if sample_rate != 22050:
+        resample = transforms.Resample(orig_freq=sample_rate, new_freq=22050)
+        waveform = resample(waveform)
 
     spec = transform(waveform).squeeze(0)
+
     if spec.shape[1] > max_len:
         spec = spec[:, :max_len]
 
@@ -71,9 +70,9 @@ def change_audio(waveform, sample_rate):
 
     return spec
 
-speech_router = APIRouter(prefix='/speech', tags=['Audio To Text'])
+gtzan_router = APIRouter(prefix='/gtzan', tags=['Audio To Text'])
 
-@speech_router.post('/')
+@gtzan_router.post('/')
 async def predict_sound(file: UploadFile = File(...)):
     try:
         sound_data = await file.read()
