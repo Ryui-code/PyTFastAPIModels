@@ -3,7 +3,7 @@ import torch.nn as nn
 from torchaudio import transforms
 import io
 from fastapi import HTTPException, APIRouter, File, UploadFile
-import torch.nn.functional as F
+import torch.nn.functional as func
 import soundfile as sf
 
 class AudioLogic(nn.Module):
@@ -37,6 +37,11 @@ class AudioLogic(nn.Module):
     x = self.first(x)
     return self.second(x)
 
+transform = transforms.MelSpectrogram(
+    sample_rate=16000,
+    n_mels=64
+)
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 model = AudioLogic().to(device)
@@ -47,12 +52,8 @@ labels = ['backward','bed','bird','cat','dog','down','eight','five',
           'marvin','nine','no','off','on','one','right','seven','sheila',
           'six','stop','three','tree','two','up','visual','wow','yes','zero'
           ]
-indx_to_lbl = {indx: lbl for indx, lbl in enumerate(labels)}
 
-transform = transforms.MelSpectrogram(
-    sample_rate=16000,
-    n_mels=64
-)
+indx_to_lbl = {indx: lbl for indx, lbl in enumerate(labels)}
 
 max_len = 100
 def change_audio(waveform, sample_rate):
@@ -66,7 +67,7 @@ def change_audio(waveform, sample_rate):
 
     if spec.shape[1] < max_len:
         count_len = max_len - spec.shape[1]
-        spec = F.pad(spec, (0, count_len))
+        spec = func.pad(spec, (0, count_len))
 
     return spec
 
