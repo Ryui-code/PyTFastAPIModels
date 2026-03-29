@@ -67,9 +67,7 @@ def change_audio(waveform, sample_rate):
         spec = spec[:, :max_len]
 
     if spec.shape[1] < max_len:
-        count_len = max_len - spec.shape[1]
-        spec = f.pad(spec, (0, count_len))
-
+        spec = f.pad(spec, (0, max_len - spec.shape[1]))
     return spec
 
 speech_router = APIRouter(prefix='/speech', tags=['Audio To Text'])
