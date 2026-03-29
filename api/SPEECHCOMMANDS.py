@@ -57,11 +57,12 @@ indx_to_lbl = {indx: lbl for indx, lbl in enumerate(labels)}
 
 max_len = 100
 def change_audio(waveform, sample_rate):
-    if sample_rate != 16000:
-        new_sr = transforms.Resample(orig_freq=sample_rate, new_freq=16000)
-        waveform = new_sr(torch.tensor(waveform))
+    waveform = torch.tensor(waveform).T
 
+    if sample_rate != 16000:
+        waveform = transforms.Resample(orig_freq=sample_rate, new_freq=16000)(waveform)
     spec = transform(waveform).squeeze(0)
+
     if spec.shape[1] > max_len:
         spec = spec[:, :max_len]
 
@@ -80,8 +81,6 @@ async def predict_sound(file: UploadFile = File(...)):
         if not sound_data:
             raise HTTPException(detail='Upload the file!', status_code=400)
         waveform, sample_rate = sf.read(io.BytesIO(sound_data), dtype='float32')
-        waveform = torch.tensor(waveform).T
-
         spec = change_audio(waveform, sample_rate).unsqueeze(0).to(device)
 
         with torch.no_grad():
