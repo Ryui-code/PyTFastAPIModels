@@ -3,7 +3,7 @@ import torch.nn as nn
 from torchaudio import transforms
 import io
 from fastapi import HTTPException, APIRouter, File, UploadFile
-import torch.nn.functional as f
+import torch.nn.functional as F
 import soundfile as sf
 
 class AudioLogic(nn.Module):
@@ -67,7 +67,7 @@ def change_audio(waveform, sample_rate):
         spec = spec[:, :max_len]
 
     if spec.shape[1] < max_len:
-        spec = f.pad(spec, (0, max_len - spec.shape[1]))
+        spec = F.pad(spec, (0, max_len - spec.shape[1]))
     return spec
 
 speech_router = APIRouter(prefix='/speech', tags=['Audio To Text'])
