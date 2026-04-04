@@ -167,7 +167,7 @@ if task == "Image to Text":
 elif task == "Audio to Text":
     audio_model = st.sidebar.radio(
         "Audio Models",
-        ['SPEECHCOMMANDS', 'GTZAN']
+        ['SPEECHCOMMANDS', 'GTZAN', 'AudioMNIST']
     )
 
     if audio_model == 'SPEECHCOMMANDS':
@@ -220,6 +220,35 @@ elif task == "Audio to Text":
                         st.success(f"""
                         **Label:** {result['label']}  
                         **Index:** {result['index']}
+                        """)
+
+                    else:
+                        st.error(f"Error: {request.status_code}")
+
+                except requests.exceptions.RequestException:
+                    st.error('Can not connect to the server')
+
+    if audio_model == 'AudioMNIST':
+        api = 'http://127.0.0.1:8000/audio_mnist'
+
+        st.title(f'Audio Model {audio_model}')
+        st.write('Upload the file and model will try to recognize it')
+
+        audio_file = st.file_uploader('Choose audiofile', type=['mp3', 'wav', 'ogg'])
+
+        if audio_file:
+            st.audio(audio_file)
+
+            if st.button('Predict'):
+                try:
+                    files = {'file': (audio_file.name, audio_file.getvalue(), audio_file.type)}
+                    request = requests.post(api, files=files)
+
+                    if request.status_code == 200:
+                        result = request.json()
+                        st.success(f"""
+                        **Label:** {result['label']}  
+                        **Probability:** {result['probability']}
                         """)
 
                     else:
