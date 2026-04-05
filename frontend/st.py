@@ -167,7 +167,7 @@ if task == "Image to Text":
 elif task == "Audio to Text":
     audio_model = st.sidebar.radio(
         "Audio Models",
-        ['SPEECHCOMMANDS', 'GTZAN', 'AudioMNIST']
+        ['SPEECHCOMMANDS', 'GTZAN', 'AudioMNIST', 'Urban']
     )
 
     if audio_model == 'SPEECHCOMMANDS':
@@ -256,3 +256,39 @@ elif task == "Audio to Text":
 
                 except requests.exceptions.RequestException:
                     st.error('Can not connect to the server')
+
+    if audio_model == 'Urban':
+        api = "http://127.0.0.1:8000/urban"
+
+        st.title(f'Audio Model {audio_model}')
+        st.write('Upload the file and model will try to recognize it')
+
+        mic_audio = st.audio_input("Record audio")
+
+        file_audio = st.file_uploader("Upload audio file", type=["wav", "mp3", "ogg"])
+
+        if st.button("Predict"):
+            try:
+                if mic_audio:
+                    files = {"file": (mic_audio.name, mic_audio.getvalue(), mic_audio.type)}
+                    request = requests.post(api, files=files)
+
+                elif file_audio:
+                    files = {"file": (file_audio.name, file_audio.getvalue(), file_audio.type)}
+                    request = requests.post(api, files=files)
+
+                else:
+                    st.error("You need to upload the file")
+                    request = None
+
+                if request and request.status_code == 200:
+                    result = request.json()
+                    st.success(f"""
+                    **Label:** {result['label']}  
+                    **Index:** {result['index']}
+                    """)
+                elif request:
+                    st.error(f"Error: {request.status_code}")
+
+            except requests.exceptions.RequestException:
+                st.error("Cannot connect to the server")
