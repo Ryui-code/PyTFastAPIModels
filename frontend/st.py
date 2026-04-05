@@ -263,32 +263,24 @@ elif task == "Audio to Text":
         st.title(f'Audio Model {audio_model}')
         st.write('Upload the file and model will try to recognize it')
 
-        mic_audio = st.audio_input("Record audio")
+        audio_file = st.file_uploader('Choose audiofile', type=['mp3', 'wav', 'ogg'])
 
-        file_audio = st.file_uploader("Upload audio file", type=["wav", "mp3", "ogg"])
+        if audio_file:
+            st.audio(audio_file)
 
-        if st.button("Predict"):
-            try:
-                if mic_audio:
-                    files = {"file": (mic_audio.name, mic_audio.getvalue(), mic_audio.type)}
+            if st.button('Predict'):
+                try:
+                    files = {'file': (audio_file.name, audio_file.getvalue(), audio_file.type)}
                     request = requests.post(api, files=files)
 
-                elif file_audio:
-                    files = {"file": (file_audio.name, file_audio.getvalue(), file_audio.type)}
-                    request = requests.post(api, files=files)
+                    if request.status_code == 200:
+                        result = request.json()
+                        st.success(f"""
+                        **Label:** {result['label']}  
+                        **Index:** {result['index']}
+                        """)
+                    else:
+                        st.error(f"Error: {request.status_code}")
 
-                else:
-                    st.error("You need to upload the file")
-                    request = None
-
-                if request and request.status_code == 200:
-                    result = request.json()
-                    st.success(f"""
-                    **Label:** {result['label']}  
-                    **Index:** {result['index']}
-                    """)
-                elif request:
-                    st.error(f"Error: {request.status_code}")
-
-            except requests.exceptions.RequestException:
-                st.error("Cannot connect to the server")
+                except requests.exceptions.RequestException:
+                    st.error('Can not connect to the server')
