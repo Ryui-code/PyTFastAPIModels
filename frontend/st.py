@@ -263,7 +263,7 @@ elif task == "Audio to Text":
         st.title(f'Audio Model {audio_model}')
         st.write('Upload the file and model will try to recognize it')
 
-        audio_file = st.file_uploader('Choose audiofile', type=['mp3', 'wav', 'ogg'])
+        audio_file = st.file_uploader('Upload the audiofile', type=['mp3', 'wav', 'ogg'])
 
         if audio_file:
             st.audio(audio_file)
