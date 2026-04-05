@@ -5,7 +5,7 @@ from api import MNIST, CIFAR_10, FashionMNIST, Smartphones, CIFAR_100, ImageScen
 app = FastAPI()
 
 app.include_router(MNIST.mnist_router)
-app.include_router(Fashion_MNIST.fashion_router)
+app.include_router(FashionMNIST.fashion_router)
 app.include_router(CIFAR_10.cifar_10_router)
 app.include_router(Smartphones.phones_router)
 app.include_router(CIFAR_100.cifar_100_router)
