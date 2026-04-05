@@ -65,11 +65,14 @@ max_len = 400
 def change_audio(waveform, sample_rate):
     waveform = torch.tensor(waveform).T
 
-    if sample_rate != 16000:
-        waveform = transforms.Resample(orig_freq=sample_rate, new_freq=16000)(waveform)
+    if waveform.ndim == 1:
+        waveform = waveform.unsqueeze(0)
 
     if waveform.shape[0] > 1:
-        waveform = torch.mean(waveform, dim=0, keepdim=True)
+        waveform = waveform.mean(dim=0, keepdim=True)
+
+    if sample_rate != 16000:
+        waveform = transforms.Resample(orig_freq=sample_rate, new_freq=16000)(waveform)
     spec = transform(waveform).squeeze(0)
 
     spec_length = spec.shape[1]
