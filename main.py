@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
-from api import MNIST, CIFAR_10, Fashion_MNIST, Smartphones, CIFAR_100, ImageScene, SPEECHCOMMANDS, GTZAN, audio_mnist, urban
+from api import MNIST, CIFAR_10, FashionMNIST, Smartphones, CIFAR_100, ImageScene, SPEECHCOMMANDS, GTZAN, audio_mnist, urban
 
 app = FastAPI()
 
