@@ -50,8 +50,6 @@ model.load_state_dict(torch.load('models/audio_mnist_model.pth', map_location=de
 
 labels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-indx_to_lbl = {indx: lbl for indx, lbl in enumerate(labels)}
-
 max_len = 100
 def change_audio(waveform, sample_rate):
     waveform = torch.tensor(waveform).T
@@ -86,11 +84,10 @@ async def predict_sound(file: UploadFile = File(...)):
             prob = torch.softmax(predict, dim=1)
 
             pred_indx = torch.argmax(predict, dim=1).item()
-            pred_lbl = indx_to_lbl[pred_indx]
             pred_prob = prob[0, pred_indx].item()
 
             return {
-                'label': pred_lbl,
+                'label': pred_indx,
                 'probability': pred_prob
             }
 

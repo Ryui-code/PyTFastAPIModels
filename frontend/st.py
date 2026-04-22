@@ -394,11 +394,11 @@ elif task == "Speech Recognition":
 if task == "Natural Language Processing":
     nlp_model = st.sidebar.radio(
         "NLP Models",
-        ['IMDB']
+        ['IMDB', 'AG News']
     )
 
     if nlp_model == 'IMDB':
-        api = 'http://127.0.0.1:8000/imdb/'
+        api = 'http://127.0.0.1:8000/imdb'
 
         st.title(f'Model {nlp_model}')
 
@@ -414,6 +414,31 @@ if task == "Natural Language Processing":
                     result = request.json()
                     st.success(f"""
                     **Text:** {result['text']}  
+                    **Label:** {result['label']}
+                    """)
+                else:
+                    st.error(f'Error: {request.status_code}')
+            except requests.exceptions.RequestException:
+                st.error('Can not connect to the API')
+
+    if nlp_model == 'AG News':
+        api = 'http://127.0.0.1:8000/ag_news'
+
+        st.title(f'Model {nlp_model}')
+
+        text = st.text_area('Text', placeholder='Write text and model will try to recognize it')
+        sentiment_data = {
+            'text': text
+        }
+
+        if st.button('Predict'):
+            try:
+                request = requests.post(api, json=sentiment_data, timeout=10)
+                if request.status_code == 200:
+                    result = request.json()
+                    st.success(f"""
+                    **Text:** {result['text']}
+                    
                     **Label:** {result['label']}
                     """)
                 else:

@@ -20,7 +20,7 @@ class SentimentalModel(nn.Module):
         _, (hidden, _) = self.lstm(x)
         return self.fc(hidden[-1])
 
-vocab = torch.load('models/labels/imdb_vocab.pth', map_location=device, weights_only=False)
+vocab = torch.load('models/imdb_vocab.pth', map_location=device, weights_only=False)
 
 model = SentimentalModel(len(vocab)).to(device)
 model.load_state_dict(torch.load('models/imdb_model.pth', map_location=device))
@@ -59,5 +59,7 @@ async def predict_text(schema: IMDBSchema):
     final_label = translated_label.text
 
     return {
+        'text': schema.text,
         'label': final_label
+
     }

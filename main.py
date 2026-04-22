@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 from api.CV import CIFAR_10, CIFAR_100, FashionMNIST, ImageScene, MNIST, Smartphones, TRASH
 from api.SR import audio_mnist, GTZAN, SPEECHCOMMANDS, urban, environmental_sound, emotional_speech
-from api.NLP import IMDB
+from api.NLP import IMDB, AG_NEWS
 
 app = FastAPI()
 
@@ -20,6 +20,7 @@ app.include_router(TRASH.trash_router)
 app.include_router(environmental_sound.environmental_sound_router)
 app.include_router(emotional_speech.emotional_speech_router)
 app.include_router(IMDB.imdb_router)
+app.include_router(AG_NEWS.ag_news_router)
 
 if __name__ == '__main__':
     uvicorn.run('main:app', reload=True)
