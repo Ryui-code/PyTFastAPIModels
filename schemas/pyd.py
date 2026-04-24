@@ -5,3 +5,6 @@ class IMDBSchema(BaseModel):
 
 class AGNewsSchema(BaseModel):
     text: str
+
+class GoEmotionsSchema(BaseModel):
+    text: str
