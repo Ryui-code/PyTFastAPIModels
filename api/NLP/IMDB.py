@@ -3,7 +3,7 @@ import torch.nn as nn
 from torchtext.data import get_tokenizer
 from fastapi import APIRouter, HTTPException
 from schemas.pyd import IMDBSchema
-from langdetect import detect
+# from langdetect import detect
 from googletrans import Translator
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
