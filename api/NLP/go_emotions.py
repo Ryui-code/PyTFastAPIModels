@@ -3,7 +3,7 @@ import torch.nn as nn
 from torchtext.data import get_tokenizer
 from fastapi import HTTPException, APIRouter
 from googletrans import Translator
-from langdetect import detect
+# from langdetect import detect
 from schemas.pyd import GoEmotionsSchema
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
