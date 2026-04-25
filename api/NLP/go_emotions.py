@@ -39,7 +39,6 @@ translator = Translator()
 go_emotions_router = APIRouter(prefix='/go_emotions', tags=['NLP'])
 
 @go_emotions_router.post('/')
-@go_emotions_router.post('/')
 async def predict_text(schema: GoEmotionsSchema):
     # try: user_lang = detect(schema.text)
     # except: user_lang = 'en'
