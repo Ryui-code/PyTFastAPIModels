@@ -36,30 +36,23 @@ translator = Translator()
 
 @imdb_router.post('/', tags=['NLP'])
 async def predict_text(schema: IMDBSchema):
-    try:
-        user_lang = detect(schema.text)
-    except:
-        user_lang = 'en'
+    # try: user_lang = detect(schema.text)
+    # except: user_lang = 'en'
 
-    translation = await translator.translate(schema.text, dest='en')
-    text_en = translation.text
+    translated_text = (await translator.translate(schema.text)).text
 
-    tokens = text_pipeline(text_en)
+    tokens = text_pipeline(translated_text)
     if not tokens:
         raise HTTPException(detail='Empty text or unknown symbols', status_code=400)
 
     x = torch.tensor(tokens, dtype=torch.int64).unsqueeze(0).to(device)
 
     with torch.no_grad():
-        pred = model(x)
-        pred_lbl = torch.argmax(pred, dim=1).item()
+        predict = model(x)
+        predict_index = torch.argmax(predict, dim=1).item()
+        predict_label = 'positive' if predict_index == 1 else 'negative'
 
-    label_en = 'positive' if pred_lbl == 1 else 'negative'
-    translated_label = await translator.translate(label_en, dest=user_lang)
-    final_label = translated_label.text
-
-    return {
-        'text': schema.text,
-        'label': final_label
-
-    }
+        return {
+            'text': schema.text,
+            'label': predict_label
+        }

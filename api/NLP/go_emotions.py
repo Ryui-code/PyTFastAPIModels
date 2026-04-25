@@ -39,9 +39,10 @@ translator = Translator()
 go_emotions_router = APIRouter(prefix='/go_emotions', tags=['NLP'])
 
 @go_emotions_router.post('/')
+@go_emotions_router.post('/')
 async def predict_text(schema: GoEmotionsSchema):
-    try: user_lang = detect(schema.text)
-    except: user_lang = 'en'
+    # try: user_lang = detect(schema.text)
+    # except: user_lang = 'en'
 
     translated_text = (await translator.translate(schema.text)).text
 
@@ -54,11 +55,9 @@ async def predict_text(schema: GoEmotionsSchema):
     with torch.no_grad():
         predict = model(x)
         predict_index = torch.argmax(predict, dim=1).item()
-
         predict_label = index_to_label[predict_index]
-        translated_label = (await translator.translate(predict_label, dest=user_lang)).text
 
         return {
             'text': schema.text,
-            'label': translated_label
+            'label': predict_label
         }

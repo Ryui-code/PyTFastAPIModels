@@ -40,8 +40,8 @@ ag_news_router = APIRouter(prefix='/ag_news', tags=['NLP'])
 
 @ag_news_router.post('/')
 async def predict_text(schema: AGNewsSchema):
-    try: user_lang = detect(schema.text)
-    except: user_lang = 'en'
+    # try: user_lang = detect(schema.text)
+    # except: user_lang = 'en'
 
     translated_text = (await translator.translate(schema.text, dest='en')).text
 
@@ -54,11 +54,9 @@ async def predict_text(schema: AGNewsSchema):
     with torch.no_grad():
         predict = model(x)
         predict_index = torch.argmax(predict, dim=1).item()
-
-        label_en = index_to_label[predict_index]
-        translated_label = (await translator.translate(label_en, dest=user_lang)).text
+        predict_label = index_to_label[predict_index]
 
         return {
             'text': schema.text,
-            'label': translated_label
+            'label': predict_label
         }
