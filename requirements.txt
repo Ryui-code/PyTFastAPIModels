@@ -59,7 +59,7 @@ sympy==1.14.0
 tbb==2021.13.1
 tenacity==9.1.4
 toml==0.10.2
-torch==2.3.0
+torch>=2.3.0
 torchaudio==2.3.0
 torchdata==0.9.0
 torchtext==0.18.0
