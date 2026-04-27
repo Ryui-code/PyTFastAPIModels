@@ -8,3 +8,6 @@ class AGNewsSchema(BaseModel):
 
 class GoEmotionsSchema(BaseModel):
     text: str
+
+class YelpReviewSchema(BaseModel):
+    text: str
