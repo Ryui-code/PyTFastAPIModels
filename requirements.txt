@@ -61,9 +61,9 @@ tenacity==9.1.4
 toml==0.10.2
 torch>=2.3.0
 torchaudio>=2.3.0
-torchdata==0.9.0
-torchtext==0.18.0
-torchvision==0.18.0
+torchdata>=0.9.0
+torchtext>=0.18.0
+torchvision>=0.18.0
 tornado==6.5.5
 tqdm==4.67.3
 typing-inspection==0.4.2
