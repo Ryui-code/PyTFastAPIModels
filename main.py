@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-import uvicorn
+# import uvicorn
 from api.CV import CIFAR_10, CIFAR_100, FashionMNIST, ImageScene, MNIST, Smartphones, TRASH
 from api.SR import audio_mnist, GTZAN, SPEECHCOMMANDS, urban, environmental_sound, emotional_speech
 from api.NLP import IMDB, AG_News, go_emotions, yelp_review
@@ -24,5 +24,5 @@ app.include_router(AG_News.ag_news_router)
 app.include_router(go_emotions.go_emotions_router)
 app.include_router(yelp_review.yelp_review_router)
 
-if __name__ == '__main__':
-    uvicorn.run('main:app', reload=True)
+# if __name__ == '__main__':
+#     uvicorn.run('main:app', reload=True)
