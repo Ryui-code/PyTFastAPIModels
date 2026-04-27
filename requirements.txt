@@ -46,7 +46,6 @@ pydantic_core==2.46.2
 pydeck==0.9.2
 python-dateutil==2.9.0.post0
 python-multipart==0.0.26
-pywin32==311
 referencing==0.37.0
 requests==2.33.1
 rpds-py==0.30.0
