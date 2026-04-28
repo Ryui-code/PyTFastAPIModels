@@ -11,3 +11,6 @@ class GoEmotionsSchema(BaseModel):
 
 class YelpReviewSchema(BaseModel):
     text: str
+
+class SentenceTypeSchema(BaseModel):
+    text: str
