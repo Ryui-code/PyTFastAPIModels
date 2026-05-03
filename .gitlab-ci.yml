@@ -24,7 +24,7 @@ test-job:
   stage: test
   script:
     - docker pull $IMAGE_TAG
-    - docker run --rm $IMAGE_TAG pytest -s -v
+    - docker run --rm $IMAGE_TAG python -m pytest -s -v
 
 deploy-job:
   stage: deploy
