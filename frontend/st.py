@@ -497,7 +497,7 @@ if task == "Natural Language Processing":
                 st.error('Cannot connect to the api')
 
     if nlp_model == 'Sentence Type':
-        api = 'http://127.0.0.1:8000/sentence_type'
+        api = 'http://api:8000/sentence_type'
 
         st.title(f'Model {nlp_model}')
 
