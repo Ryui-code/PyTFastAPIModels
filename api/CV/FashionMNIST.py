@@ -33,7 +33,7 @@ transform = transforms.Compose([
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = NNLogic()
-model.load_state_dict(torch.load('models/model (1).pth', map_location=device))
+model.load_state_dict(torch.load('models/fashion_mnist_model.pth', map_location=device))
 model.to(device)
 model.eval()
 

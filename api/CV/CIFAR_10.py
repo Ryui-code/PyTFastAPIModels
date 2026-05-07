@@ -69,7 +69,7 @@ transform = transforms.Compose([
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = Vgg16Logic()
-model.load_state_dict(torch.load('models/vgg_model.pth', map_location=device))
+model.load_state_dict(torch.load('models/cifar_10_model.pth', map_location=device))
 model.to(device)
 model.eval()
 
