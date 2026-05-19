@@ -59,9 +59,8 @@ transform = transforms.Compose([
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-model = Vgg16Logic()
+model = Vgg16Logic().to(device)
 model.load_state_dict(torch.load('models/smartphones_model.pth', map_location=device))
-model.to(device)
 model.eval()
 
 labels = ['Google Pixel', 'Huawei', 'Iphone', 'Samsung', 'Xiaomi']
@@ -79,8 +78,8 @@ async def predict_img(file: UploadFile = File(...)):
 
         with torch.no_grad():
             predict = model(tensor_img)
-            pred = predict.argmax(dim=1).item()
+            predict_index = predict.argmax(dim=1).item()
 
-            return {'Prediction': labels[pred]}
+            return {'Prediction': labels[predict_index]}
     except Exception as e:
         raise HTTPException(detail=str(e), status_code=500)

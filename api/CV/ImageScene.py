@@ -45,9 +45,9 @@ async def predict_img(file: UploadFile = File(...)):
 
         with torch.no_grad():
             predict = model(tensor_img)
-            pred = predict.argmax(dim=1).item()
+            predict_index = predict.argmax(dim=1).item()
 
-        return {"Prediction": labels[pred]}
+        return {"Prediction": labels[predict_index]}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

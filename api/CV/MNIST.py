@@ -32,9 +32,9 @@ transform = transforms.Compose([
 ])
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = NNLogic()
+
+model = NNLogic().to(device)
 model.load_state_dict(torch.load('models/mnist_model.pth', map_location=device))
-model.to(device)
 model.eval()
 
 mnist_router = APIRouter(prefix='/mnist', tags=['CV'])
@@ -50,8 +50,8 @@ async def predict_img(file: UploadFile = File(...)):
 
         with torch.no_grad():
             predict = model(tensor_img)
-            pred = predict.argmax(dim=1).item()
-        return {'Prediction': pred}
+            predict_index = predict.argmax(dim=1).item()
+        return {'Prediction': predict_index}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
